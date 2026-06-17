@@ -8,21 +8,25 @@ const app = express();
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 
-// 1. Koneksi Database MySQL (Menggunakan SSL agar aman di Azure)
-const db = mysql.createConnection({
+// 1. MENGGUNAKAN POOL agar koneksi otomatis reconnect jika terputus/idle
+const db = mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
-    ssl: { rejectUnauthorized: false }
+    ssl: { rejectUnauthorized: false },
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
 });
 
-// Tes koneksi database saat startup agar log terbaca jika ada error konfigurasi
-db.connect((err) => {
+// Tes koneksi pool saat startup
+db.getConnection((err, connection) => {
     if (err) {
         console.error("Database connection failed:", err.message);
     } else {
-        console.log("Connected to MySQL Database.");
+        console.log("Connected to MySQL Database via Connection Pool.");
+        connection.release(); // Kembalikan koneksi ke pool
     }
 });
 
@@ -42,7 +46,6 @@ try {
 // 3. Endpoint POST untuk memproses form submit tugas
 app.post('/submit-task', upload.single('file_tugas'), async (req, res) => {
     try {
-        // Menggunakan alias classField karena 'class' adalah reserved keyword di JavaScript
         const { nim, name, class: classField, course } = req.body;
 
         // Validasi input file
@@ -58,7 +61,7 @@ app.post('/submit-task', upload.single('file_tugas'), async (req, res) => {
         // Penamaan file unik di Blob: NIM_NamaFile Asli
         const blobName = `${nim}_${req.file.originalname}`;
 
-        // Langkah A: Upload file ke Azure Blob Storage (Sudah disesuaikan ke praktikum-049)
+        // Langkah A: Upload file ke Azure Blob Storage
         const containerClient = blobServiceClient.getContainerClient('praktikum-049');
         const blockBlobClient = containerClient.getBlockBlobClient(blobName);
         
@@ -69,7 +72,7 @@ app.post('/submit-task', upload.single('file_tugas'), async (req, res) => {
         const fileUrl = blockBlobClient.url;
         console.log(`File uploaded successfully to blob: ${fileUrl}`);
 
-        // Langkah B: Simpan data ke database MySQL (Menggunakan kolom 'class' sesuai struktur modul kamu)
+        // Langkah B: Simpan data ke database MySQL menggunakan pool
         const sql = "INSERT INTO submissions (nim, name, class, course, file_url) VALUES (?, ?, ?, ?, ?)";
         
         db.query(sql, [nim, name, classField, course, fileUrl], (err, result) => {
