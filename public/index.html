@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Tugas Praktikum</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-6 text-slate-800">
+
+    <div class="bg-white/95 backdrop-blur-sm p-8 rounded-2xl shadow-2xl w-full max-w-md border border-white/20 transform transition duration-500 hover:scale-[1.01]">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 tracking-tight">
+                Form Pengumpulan Tugas
+            </h1>
+            <p class="text-sm text-slate-500 mt-2 font-medium">Praktikum Komputasi Awan Azure</p>
+        </div>
+
+        <form action="/submit-task" method="POST" enctype="multipart/form-data" class="space-y-5">
+            
+            <!-- Input NIM -->
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="nim">NIM</label>
+                <input type="text" id="nim" name="nim" required placeholder="Masukkan NIM kamu"
+                    class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition placeholder:text-slate-400">
+            </div>
+
+            <!-- Input Nama -->
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="name">Nama Lengkap</label>
+                <input type="text" id="name" name="name" required placeholder="Masukkan Nama Lengkap"
+                    class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition placeholder:text-slate-400">
+            </div>
+
+            <!-- Input Kelas -->
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="class">Kelas</label>
+                <input type="text" id="class" name="class" required placeholder="Contoh: TI-2A"
+                    class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition placeholder:text-slate-400">
+            </div>
+
+            <!-- Input Mata Kuliah -->
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="course">Mata Kuliah</label>
+                <input type="text" id="course" name="course" required placeholder="Contoh: Praktikum Cloud Computing"
+                    class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition placeholder:text-slate-400">
+            </div>
+
+            <!-- Upload File -->
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="file_tugas">File Tugas (PDF/ZIP)</label>
+                <div class="relative flex items-center justify-center w-full">
+                    <label class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-slate-300 rounded-xl cursor-pointer bg-slate-50 hover:bg-slate-100/80 hover:border-purple-400 transition">
+                        <div class="flex flex-col items-center justify-center pt-5 pb-6 text-center px-4">
+                            <svg class="w-8 h-8 mb-2 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                            </svg>
+                            <p class="text-xs font-semibold text-slate-600">Klik untuk mencari file tugas</p>
+                            <p class="text-[10px] text-slate-400 mt-1">Maksimal ukuran file 10MB</p>
+                        </div>
+                        <input type="file" id="file_tugas" name="file_tugas" required class="hidden" />
+                    </label>
+                </div>
+            </div>
+
+            <!-- Tombol Submit -->
+            <button type="submit" 
+                class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-3 rounded-xl shadow-lg hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-all transform active:scale-[0.98] mt-4 tracking-wide">
+                Kirim Tugas
+            </button>
+        </form>
+    </div>
+
+</body>
+</html>
