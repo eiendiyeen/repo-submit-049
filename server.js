@@ -58,8 +58,8 @@ app.post('/submit-task', upload.single('file_tugas'), async (req, res) => {
         // Penamaan file unik di Blob: NIM_NamaFile Asli
         const blobName = `${nim}_${req.file.originalname}`;
 
-        // Langkah A: Upload file ke Azure Blob Storage
-        const containerClient = blobServiceClient.getContainerClient('tugas-praktikum');
+        // Langkah A: Upload file ke Azure Blob Storage (Sudah disesuaikan ke praktikum-049)
+        const containerClient = blobServiceClient.getContainerClient('praktikum-049');
         const blockBlobClient = containerClient.getBlockBlobClient(blobName);
         
         await blockBlobClient.uploadData(req.file.buffer, {
